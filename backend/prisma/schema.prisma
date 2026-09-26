@@ -79,6 +79,7 @@ model Job {
   requirements    String    @db.Text
   headcount       Int
   status          JobStatus
+  version         Int       @default(1)
   hiringManagerId Int
   hiringManager   User      @relation("HiringManagerJobs", fields: [hiringManagerId], references: [id])
   createdAt       DateTime  @default(now())

@@ -40,6 +40,7 @@ frontend/
 ## 核心能力
 
 - 职位 Job：创建、编辑、列表筛选、详情、发布/暂停/关闭/重新打开/归档状态机。
+- 并发编辑冲突处理：职位携带 `version` 乐观锁。编辑打开时带上当前版本、保存时提交该版本；期间被他人改过则返回 409，保留对方内容并列出已变化字段，可一键载入最新内容后继续编辑。发布/暂停/关闭等状态流转按同一版本判断，版本对不上时提示重新载入。
 - 候选人 Candidate + 简历 Resume：候选人检索、投递记录、简历状态推进、看板拖拽流转。
 - 面试 Interview：日历视图、安排面试、面试官反馈、评分和结果记录。
 - Offer：创建草稿、审批、发送、接受/拒绝/撤回状态机。
@@ -91,7 +92,7 @@ docker compose up --build
 ## API 清单
 
 - `POST /api/auth/login`
-- `GET /api/jobs`、`POST /api/jobs`、`GET /api/jobs/:id`、`PATCH /api/jobs/:id`、`PATCH /api/jobs/:id/status`
+- `GET /api/jobs`、`POST /api/jobs`、`GET /api/jobs/:id`、`PATCH /api/jobs/:id`（需携带 `version`，冲突返回 409 + `current`/`changedFields`）、`PATCH /api/jobs/:id/status`（同样需携带 `version`）
 - `GET /api/jobs/:id/resumes`、`GET /api/jobs/:id/interviews`
 - `GET /api/candidates?status=&source=&jobId=&keyword=`、`GET /api/candidates/:id`
 - `GET /api/candidates/:id/resumes`、`GET /api/candidates/:id/interviews`、`GET /api/candidates/:id/offers`
