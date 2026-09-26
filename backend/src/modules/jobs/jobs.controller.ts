@@ -9,7 +9,7 @@ export class JobsController {
   @Post() @Roles(UserRole.HR, UserRole.HIRING_MANAGER, UserRole.ADMIN) create(@Body() body: any) { return this.jobs.create(body); }
   @Get(':id') findOne(@Param('id') id: string) { return this.jobs.findOne(+id); }
   @Patch(':id') @Roles(UserRole.HR, UserRole.HIRING_MANAGER, UserRole.ADMIN) update(@Param('id') id: string, @Body() body: any) { return this.jobs.update(+id, body); }
-  @Patch(':id/status') @Roles(UserRole.HR, UserRole.HIRING_MANAGER, UserRole.ADMIN) status(@Param('id') id: string, @Body() body: { status: JobStatus; reason?: string }) { return this.jobs.updateStatus(+id, body.status, body.reason); }
+  @Patch(':id/status') @Roles(UserRole.HR, UserRole.HIRING_MANAGER, UserRole.ADMIN) status(@Param('id') id: string, @Body() body: { status: JobStatus; reason?: string; version?: number }) { return this.jobs.updateStatus(+id, body.status, body.reason, body.version); }
   @Get(':id/resumes') resumes(@Param('id') id: string) { return this.jobs.resumes(+id); }
   @Get(':id/interviews') interviews(@Param('id') id: string) { return this.jobs.interviews(+id); }
 }
